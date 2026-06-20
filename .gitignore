@@ -1,0 +1,19 @@
+# ESP-IDF build directory
+build/
+sdkconfig
+sdkconfig.old
+
+# Python virtual environment and cache
+.cache/
+__pycache__/
+*.pyc
+venv/
+env/
+.venv/
+
+# VS Code directory
+.vscode/
+
+# Local model packing temporary files
+managed_components/
+dependencies.lock
