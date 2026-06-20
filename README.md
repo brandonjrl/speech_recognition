@@ -58,6 +58,30 @@ idf.py -p PUERTO_COM flash
 idf.py -p PUERTO_COM monitor
 ```
 
+### 8. Cómo interactuar con el sistema (Uso en Hardware)
+
+Una vez que hayas flasheado y abierto el monitor serial en tu ESP32-S3, puedes probar el sistema interactuando físicamente de la siguiente forma:
+
+1. **Asegurar las conexiones físicas:** 
+   - Conecta tu micrófono I2S a los pines asignados en el código: `SCLK` al pin **GPIO 12**, `LRCK` al pin **GPIO 11** y `SDIN` al pin **GPIO 10**.
+   - Conecta un LED indicador al pin **GPIO 3** (LED de estado de escucha).
+   - El pin de control por defecto es el **GPIO 2** (suele ser el LED integrado en la mayoría de placas de desarrollo).
+
+2. **Activar el sistema por voz:**
+   Habla cerca del micrófono y di con voz clara: **"AURA"** (o **"JARVIS"**).
+   - En la consola del monitor serial verás aparecer el log de detección:
+     `I (1890) AURA_SR: WakeWord 'AURA' detected! Status Pin 3 set to HIGH. Listening for actions...`
+   - El LED de estado en el **GPIO 3 se encenderá**, indicando que la placa está esperando un comando.
+
+3. **Ejecutar un comando de acción:**
+   Tienes una ventana de **3 segundos** para decir una de las órdenes registradas: **"encender"** o **"apagar"**.
+   - Si dices *"encender"*, verás que la salida cambia:
+     `I (1990) AURA_SR: Command Match: 'encender' -> GPIO 2 set to HIGH`
+     - El LED indicador (GPIO 3) se apagará y el dispositivo del **GPIO 2 se encenderá**.
+   - Si no dices ningún comando y transcurren los 3 segundos, la ventana se cierra:
+     `I (1560) AURA_SR: Listening window timed out (3s). Pin 3 OFF. Awaiting WakeWord...`
+     - El LED indicador (GPIO 3) se apagará automáticamente y el sistema volverá al modo de reposo a esperar la palabra clave.
+
 ---
 
 ## ⚙️ ¿Qué hace el código y cómo funciona?
