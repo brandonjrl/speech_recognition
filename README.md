@@ -161,3 +161,9 @@ python voice_test_pc.py
 *   Di inmediatamente: **"encender"**.
 *   El script lo enviará al simulador: se activará la salida (GPIO 2 pasa a HIGH) y el sistema regresará al estado de reposo listo para escuchar tu voz nuevamente.
 *   Para salir del script di **"salir"** o presiona `Ctrl` + `C`.
+
+---
+
+## 🤝 Créditos y Agradecimientos
+
+Este proyecto está inspirado y utiliza como base el trabajo de desarrollo original de [KishSan](https://github.com/KishSan) en el repositorio [mk39-speech-recognition](https://github.com/KishSan/mk39-speech-recognition), el cual provee excelentes bases para el control offline por comandos de voz en microcontroladores ESP32.
