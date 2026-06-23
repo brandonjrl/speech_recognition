@@ -12,11 +12,11 @@ int main(void)
         return 1;
     }
 
-    // Register GPIO pin 2 (the simulated LED)
+    // Register GPIO pin 3 (the simulated LED/relay)
     // Keyword "encender" -> HIGH
     // Keyword "apagar" -> LOW
-    aura_sr_register_action(2, "encender", AURA_ACTION_ON);
-    aura_sr_register_action(2, "apagar", AURA_ACTION_OFF);
+    aura_sr_register_action(3, "encender", AURA_ACTION_ON);
+    aura_sr_register_action(3, "apagar", AURA_ACTION_OFF);
 
     // Start simulation loop (listens to commands via stdin)
     aura_sr_start();

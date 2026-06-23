@@ -10,7 +10,7 @@
 
 static const char *TAG = "AURA_SR";
 
-#define GPIO_INDICATOR_PIN GPIO_NUM_3
+#define GPIO_INDICATOR_PIN GPIO_NUM_2
 #define MAX_COMMANDS 10
 
 typedef enum {
@@ -154,7 +154,7 @@ static void detect_Task(void *arg)
             if (elapsed >= LISTEN_WINDOW_US) {
                 current_state = AURA_STATE_WAKEWORD;
                 gpio_set_level(GPIO_INDICATOR_PIN, 0); // Turn OFF indicator LED
-                ESP_LOGI(TAG, "Listening window timed out (3s). Pin 3 OFF. Awaiting WakeWord...");
+                ESP_LOGI(TAG, "Listening window timed out (3s). Pin %d OFF. Awaiting WakeWord...", GPIO_INDICATOR_PIN);
             }
         }
 
@@ -185,7 +185,7 @@ static void detect_Task(void *arg)
                             current_state = AURA_STATE_COMMAND;
                             state_transition_time = esp_timer_get_time();
                             gpio_set_level(GPIO_INDICATOR_PIN, 1); // Turn ON indicator LED
-                            ESP_LOGI(TAG, "WakeWord '%s' detected! Status Pin 3 set to HIGH. Listening for actions...", mn_result->string);
+                            ESP_LOGI(TAG, "WakeWord '%s' detected! Status Pin %d set to HIGH. Listening for actions...", mn_result->string, GPIO_INDICATOR_PIN);
                             break;
                         }
                     } 
@@ -215,7 +215,7 @@ static void detect_Task(void *arg)
 
 esp_err_t aura_sr_init(void)
 {
-    ESP_LOGI(TAG, "Initializing indicator LED on GPIO 3...");
+    ESP_LOGI(TAG, "Initializing indicator LED on GPIO %d...", GPIO_INDICATOR_PIN);
     gpio_config_t io_conf = {
         .intr_type = GPIO_INTR_DISABLE,
         .mode = GPIO_MODE_OUTPUT,
@@ -324,8 +324,8 @@ static void serial_cli_task(void *arg)
             TickType_t elapsed = xTaskGetTickCount() - cli_transition_tick;
             if (pdTICKS_TO_MS(elapsed) >= CLI_LISTEN_WINDOW_MS) {
                 cli_state = AURA_STATE_WAKEWORD;
-                gpio_set_level(GPIO_INDICATOR_PIN, 0); // Turn off Pin 3
-                printf("\n[TIMEOUT] 3 seconds elapsed. Status LED (Pin 3) turned OFF. Awaiting WakeWord...\n");
+                gpio_set_level(GPIO_INDICATOR_PIN, 0); // Turn off Pin 2
+                printf("\n[TIMEOUT] 3 seconds elapsed. Status LED (Pin %d) turned OFF. Awaiting WakeWord...\n", GPIO_INDICATOR_PIN);
                 printf("AURA > ");
                 fflush(stdout);
             }
@@ -347,8 +347,8 @@ static void serial_cli_task(void *arg)
                     if (strcasecmp(cmd, "AURA") == 0 || strcasecmp(cmd, "JARVIS") == 0) {
                         cli_state = AURA_STATE_COMMAND;
                         cli_transition_tick = xTaskGetTickCount();
-                        gpio_set_level(GPIO_INDICATOR_PIN, 1); // Turn ON Pin 3
-                        printf("\n[WAKE] WakeWord '%s' heard! Status LED (Pin 3) turned ON. Speak action command within 3s...\n", cmd);
+                        gpio_set_level(GPIO_INDICATOR_PIN, 1); // Turn ON indicator LED
+                        printf("\n[WAKE] WakeWord '%s' heard! Status LED (Pin %d) turned ON. Speak action command within 3s...\n", cmd, GPIO_INDICATOR_PIN);
                     } else {
                         printf("\n[CLI Error] Speak WakeWord first ('AURA' or 'JARVIS'). Heard: '%s'\n", cmd);
                     }
@@ -368,12 +368,12 @@ static void serial_cli_task(void *arg)
                     }
                     
                     cli_state = AURA_STATE_WAKEWORD;
-                    gpio_set_level(GPIO_INDICATOR_PIN, 0); // Turn OFF Pin 3
+                    gpio_set_level(GPIO_INDICATOR_PIN, 0); // Turn OFF indicator LED
                     
                     if (matched) {
-                        printf("[WAKE_OFF] Action complete. Status Pin 3 set to LOW. Awaiting WakeWord...\n");
+                        printf("[WAKE_OFF] Action complete. Status Pin %d set to LOW. Awaiting WakeWord...\n", GPIO_INDICATOR_PIN);
                     } else {
-                        printf("\n[CLI Error] Command '%s' not matched. Returning to WakeWord state. Pin 3 set to LOW.\n", cmd);
+                        printf("\n[CLI Error] Command '%s' not matched. Returning to WakeWord state. Pin %d set to LOW.\n", cmd, GPIO_INDICATOR_PIN);
                     }
                 }
                 printf("AURA > ");
@@ -391,7 +391,7 @@ static void serial_cli_task(void *arg)
 
 esp_err_t aura_sr_init(void)
 {
-    ESP_LOGI(TAG, "Initializing indicator LED on GPIO 3...");
+    ESP_LOGI(TAG, "Initializing indicator LED on GPIO %d...", GPIO_INDICATOR_PIN);
     gpio_config_t io_conf = {
         .intr_type = GPIO_INTR_DISABLE,
         .mode = GPIO_MODE_OUTPUT,

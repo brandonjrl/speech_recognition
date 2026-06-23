@@ -19,7 +19,7 @@ class AuraCommand:
 # Settings
 registered_commands = []
 simulated_gpio_states = [0] * 40
-GPIO_INDICATOR_PIN = 3
+GPIO_INDICATOR_PIN = 2
 
 current_state = AuraState.WAKEWORD
 state_transition_time = 0.0
@@ -108,11 +108,11 @@ def main():
     
     aura_sr_init()
     
-    # Register GPIO pin 2 (the simulated LED)
+    # Register GPIO pin 3 (the simulated LED/relay)
     # Keyword "encender" -> HIGH
     # Keyword "apagar" -> LOW
-    aura_sr_register_action(2, "encender", AuraAction.ON)
-    aura_sr_register_action(2, "apagar", AuraAction.OFF)
+    aura_sr_register_action(3, "encender", AuraAction.ON)
+    aura_sr_register_action(3, "apagar", AuraAction.OFF)
     
     aura_sr_start()
 

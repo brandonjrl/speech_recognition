@@ -6,7 +6,7 @@
 #include "aura_sr.h"
 
 #define MAX_COMMANDS 10
-#define GPIO_INDICATOR_PIN 3
+#define GPIO_INDICATOR_PIN 2
 
 typedef enum {
     AURA_STATE_WAKEWORD = 0,
@@ -81,7 +81,7 @@ void process_input_line(const char* input)
         if (now - state_transition_time >= 3) {
             current_state = AURA_STATE_WAKEWORD;
             simulated_gpio_states[GPIO_INDICATOR_PIN] = 0;
-            printf("\n>>> [SIM TIMEOUT] 3 seconds elapsed. Status LED (GPIO 3) toggled to LOW (0). Awaiting WakeWord...\n\n");
+            printf("\n>>> [SIM TIMEOUT] 3 seconds elapsed. Status LED (GPIO %d) toggled to LOW (0). Awaiting WakeWord...\n\n", GPIO_INDICATOR_PIN);
         }
     }
     
@@ -126,9 +126,9 @@ void process_input_line(const char* input)
         simulated_gpio_states[GPIO_INDICATOR_PIN] = 0;
         
         if (matched) {
-            printf(">>> [SIM STATUS] Action executed. Status LED (GPIO 3) toggled to LOW (0). Awaiting WakeWord...\n\n");
+            printf(">>> [SIM STATUS] Action executed. Status LED (GPIO %d) toggled to LOW (0). Awaiting WakeWord...\n\n", GPIO_INDICATOR_PIN);
         } else {
-            printf("\n>>> [SIM ERROR] Command '%s' not recognized. Returning to WakeWord state. Status LED (GPIO 3) toggled to LOW (0).\n\n", start);
+            printf("\n>>> [SIM ERROR] Command '%s' not recognized. Returning to WakeWord state. Status LED (GPIO %d) toggled to LOW (0).\n\n", start, GPIO_INDICATOR_PIN);
         }
     }
 }
